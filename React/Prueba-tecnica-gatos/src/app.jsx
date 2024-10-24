@@ -1,41 +1,35 @@
 import './app.css'
 import { useState, useEffect } from 'react'
-
-const RANDOM_FACT_ENDPOINT = `https://catfact.ninja/fact` 
+import { getRandomFact} from './services/facts.js'
+import { useCatImage } from './hooks/useCatImage.js'
 //const RANDOM_IMAGE_ENPOINT = `https://cataas.com/cat/says/${word}`
+
 
 export function App() {
     const [fact, setFact] = useState()
-    const [imageUrl,setImageUrl] = useState()
+    const { imageUrl } = useCatImage({ fact })
     
     useEffect(() => {
-        
-        fetch(RANDOM_FACT_ENDPOINT)
-        .then(res => res.json())
-        .then(data => {  
-            const { fact } = data
-            setFact(fact)    
-        })
-    },[])
+        getRandomFact().then(setFact)
 
-    useEffect(()=>{
-        if(!fact) return
-        
-        const word = fact.split(' ')[0]
-        fetch(`https://cataas.com/cat/says/${word}`)
-        .then(response => {
-            const { url } = response
-            setImageUrl(url)
-        
-        })  
-    },[fact])
+    }, [])
+
+    
+
+    
+
+    const handleClick =  async () => {
+        const newFact = await getRandomFact()
+        setFact(newFact)
+    }
 
     return(
         <main>
             <h1> Gatos cutes </h1>
+            <button onClick={handleClick}> New Fact</button>
                 <section>
                     {fact && <p>{fact}</p>}
-                    {imageUrl &&  <img src = {imageUrl} alt = {`imagine extracted for ${fact}`} />}
+                    {imageUrl &&  <img src = {imageUrl} className='catImg' alt = {`imagine extracted for ${fact}`} />}
                 </section>
         </main>
 )}
