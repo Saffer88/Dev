@@ -4,7 +4,7 @@ import './App.css'
 
 const TURNS = {
 
-  X : 'x',
+  X : 'X',
   O : 'O'
 }
 
@@ -28,6 +28,11 @@ function App() {
   const [turn, setTurn] = useState(TURNS.X)
   
   const updateBoard = (index) => {
+
+    const newBoard = [...board]
+    newBoard[index] = turn
+    setBoard(newBoard)
+
     const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X  
     setTurn(newTurn)
   }
@@ -45,7 +50,7 @@ function App() {
             index={index}
             updateBoard={updateBoard}
             >
-              {board[{index}]}
+              {board[index]}
             </Square> 
             )
           }
