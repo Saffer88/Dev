@@ -8,6 +8,17 @@ const TURNS = {
   O : 'O'
 }
 
+ const WIN_COMBINATIONS = [
+  [0, 1, 2], // Horizontal
+  [3, 4, 5],
+  [6, 7, 8],
+  [0, 3, 6], // Vertical
+  [1, 4, 7],
+  [2, 5, 8],
+  [0, 4, 8], // Diagonal
+  [2, 4, 6]
+]
+
 const Square = ({ children, isSelected, updateBoard, index }) => {
   const className = `square ${isSelected ? 'is-selected' : ''}`
   
@@ -22,12 +33,32 @@ const Square = ({ children, isSelected, updateBoard, index }) => {
   )
 }
 
-
+//////////////////////////////////////////////////////////////////////
 function App() {
+  // ESTADOS
   const [board, setBoard] = useState(Array(9).fill(null))
   const [turn, setTurn] = useState(TURNS.X)
+  const [winner, setWinner] = useState(null)
+
   
+  const checkWinner = (boardToCheck) => {
+    for (const combo of WIN_COMBINATIONS) {
+      const [a, b, c] = combo
+      if (
+        boardToCheck[a] && 
+        boardToCheck[a] === boardToCheck[b] && 
+        boardToCheck[a] === boardToCheck[c]
+       ) {
+        return boardToCheck[a]
+       }
+    }
+    // sin ganador
+    return null
+   }
+
+
   const updateBoard = (index) => {
+    if (board[index] || winner) return
 
     const newBoard = [...board]
     newBoard[index] = turn
@@ -35,7 +66,17 @@ function App() {
 
     const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X  
     setTurn(newTurn)
+
+    const newWinner = checkWinner(newBoard)
+      if (newWinner) {
+        setWinner(newWinner)
+      }
   }
+
+  
+
+
+
   return (
       
       <main className='board'>
