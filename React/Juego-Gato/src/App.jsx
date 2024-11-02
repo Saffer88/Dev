@@ -56,6 +56,19 @@ function App() {
     return null
    }
 
+   const checkTie= (newBoard) => {
+    return newBoard.every((square) => square != null)
+   }
+
+
+   const resetGame = () => {
+    setBoard(Array(9).fill(null))
+    setTurn(TURNS.X)
+    setWinner(null)
+
+   }
+
+
 
   const updateBoard = (index) => {
     if (board[index] || winner) return
@@ -70,17 +83,18 @@ function App() {
     const newWinner = checkWinner(newBoard)
       if (newWinner) {
         setWinner(newWinner)
+      }else if(checkTie(newBoard)){
+        setWinner(false)
       }
   }
 
   
 
-
-
   return (
       
       <main className='board'>
         <h1>The CAT</h1>
+        <button onClick={resetGame}>Reset game</button>
 
         <section className='game'>
         {
@@ -99,6 +113,7 @@ function App() {
         )}
 
         </section>
+
         <section className='turn'>
           <Square isSelected={turn == TURNS.X}>
             {TURNS.X}
@@ -107,6 +122,30 @@ function App() {
             {TURNS.O}
           </Square>
         </section>
+
+        {
+          winner != null && (
+            <section className='winner'>
+              <div className='text'>
+                <h2>
+                    {
+                      winner == false
+                      ? 'Empate'
+                      : 'Ganó: '
+                    }
+                </h2>
+
+                <header className='win'>
+                  {winner && <Square>{winner}</Square>}
+                </header>
+
+                <footer>
+                  <button onClick={resetGame}>Try again</button>
+                </footer>
+              </div>
+            </section>
+          )
+        }
       </main>
     )
   }
