@@ -1,33 +1,44 @@
 import { useState } from 'react'
 import './App.css'
-
-
-const TURNS = {
-
-  X : 'X',
-  O : 'O'
-}
-
-const Square = ({ children, isSelected, updateBoard, index }) => {
-  const className = `square ${isSelected ? 'is-selected' : ''}`
-  
-  const handleCick = () => {
-    updateBoard(index)
-  }
-
-  return(
-    <div  onClick={handleCick} className={className}>
-      {children}
-    </div>
-  )
-}
-
+import confetti from 'canvas-confetti'
+import { Square } from './Components/Square'
+import { TURNS } from './constants.js'
+import { checkWinner , checkTie} from './logic/board.js'
+import { WinnerModal }  from './Components/winner.jsx'
+import { SaveGameStorage } from './logic/storage.js'
+import { ResetGameStorage } from './logic/storage.js'
 
 function App() {
-  const [board, setBoard] = useState(Array(9).fill(null))
-  const [turn, setTurn] = useState(TURNS.X)
+  // ESTADOS
+  const [board, setBoard] = useState(() => {
+    const BoardFromStorage = window.localStorage.getItem('board')
+    return BoardFromStorage ? 
+    JSON.parse(BoardFromStorage) : (Array(9).fill(null))
   
+  }) 
+  
+  
+  const [turn, setTurn] = useState(() =>{
+  const turnFromStorage = window.localStorage.getItem('turn')
+    
+    return turnFromStorage ?? TURNS.X
+  })
+
+
+
+
+  const [winner, setWinner] = useState(null)
+
+  const resetGame = () => {
+    setBoard(Array(9).fill(null))
+    setTurn(TURNS.X)
+    setWinner(null)
+    
+   ResetGameStorage()
+   }
+
   const updateBoard = (index) => {
+    if (board[index] || winner) return
 
     const newBoard = [...board]
     newBoard[index] = turn
@@ -35,11 +46,24 @@ function App() {
 
     const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X  
     setTurn(newTurn)
+
+    SaveGameStorage()
+
+
+    const newWinner = checkWinner(newBoard)
+      if (newWinner) {
+        confetti()
+        setWinner(newWinner)
+      }else if(checkTie(newBoard)){
+        setWinner(false)
+      }
   }
+
   return (
       
       <main className='board'>
         <h1>The CAT</h1>
+        <button onClick={resetGame}>Reset game</button>
 
         <section className='game'>
         {
@@ -58,6 +82,7 @@ function App() {
         )}
 
         </section>
+
         <section className='turn'>
           <Square isSelected={turn == TURNS.X}>
             {TURNS.X}
@@ -66,6 +91,8 @@ function App() {
             {TURNS.O}
           </Square>
         </section>
+
+       <WinnerModal resetGame={resetGame} winner={winner}/>
       </main>
     )
   }
