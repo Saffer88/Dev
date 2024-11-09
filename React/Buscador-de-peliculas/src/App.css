@@ -1,0 +1,22 @@
+.page{
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+form{
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  gap: 8px
+  
+}
+
+main{
+  align-items: center;
+  display: flex;
+  justify-content: center;
+
+}
+
