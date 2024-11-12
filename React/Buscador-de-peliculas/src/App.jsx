@@ -1,15 +1,26 @@
 import './App.css'
 import responseMovies from './mocks/responseMovies.json'
-//import noResponseMovies from './mocks/noResponseMovies.json'
-
+import noResponseMovies from './mocks/noResponseMovies.json'
+import { ReturningMapping } from './components/movies.jsx'
 // const API_MOVIES_URL = `https://www.omdbapi.com/?apikey=34bda7af&S=Avengers`
 
-const movies = responseMovies.Search
-const hasMovies = movies?.length > 0
+
+
+
+
+
 
 
 function App() {
-  
+  const movies = responseMovies.Search
+
+
+  const movieList =  movies?.map( movie => ({
+    id : movie.imdbID,
+    title: movie.Title,
+    year: movie.Year,
+    poster : movie.Poster 
+  }))
 
   return (
     <div className='page'>
@@ -24,29 +35,8 @@ function App() {
 
 
       <main>
-          {
-             hasMovies ? 
-             (
-              <ul>
-                {
-                  movies.map(movie => (
-                    <li key={movie.imdbID}>
-                      <h3>{movie.Title}</h3>
-                      <p>{movie.Year}</p>
-                      <img src={movie.Poster} alt={movie.Title}/>
-
-                    </li>
-                  ))
-                }
-              </ul>
-
-             ) 
-             :
-             (
-                <p>No se encontraron resultados para esta búsqueda</p>
-             )
-          }
           
+          <ReturningMapping movies= { movieList }/>
 
       </main>
     </div>
