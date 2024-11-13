@@ -1,5 +1,5 @@
 import responseMovies from '../mocks/responseMovies.json'
-import noResponseMovies from '../mocks/noResponseMovies.json'
+
 
 
 export function useMovies() {

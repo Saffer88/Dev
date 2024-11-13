@@ -1,15 +1,20 @@
 import './App.css'
-import { useRef, useEffect, useState} from 'react'
+import { useSearch } from './hooks/useSearch.js' 
 import { useMovies } from './hooks/useMovies.js'
 import { ReturningMapping } from './components/movies.jsx'
 // const API_MOVIES_URL = `https://www.omdbapi.com/?apikey=34bda7af&S=Avengers`
 
 
+
+
+
+
 function App() {
   const { movies } = useMovies() 
-  const [ inputSearch, setIputSearch ]= useState('')
-  const inputRef = useRef()
+  const {inputSearch, err, setInputSearch } = useSearch()
+  
 
+  
   // manejar el evento de submit con useRef 
   //(poner la ref en el componente, aqui en el botton ref={inputRef}
 
@@ -30,8 +35,8 @@ function App() {
 
   const handleSubmit= (event) => {
     event.preventDefault()
-    const {search}  = Object.fromEntries(new FormData(event.target))
-    console.log( {search} )
+    //const {search}  = Object.fromEntries(new FormData(event.target))
+    console.log( {inputSearch} )
 
 
 
@@ -42,15 +47,24 @@ function App() {
     // console.log(search)
   }
 
+  const handleChange = (event) => {
+    const newSearch = event.target.value
+    if(newSearch.startsWith(' ') ) return
+    setInputSearch(event.target.value)
+  }
+
+
+ 
   return (
     <div className='page'>
 
       <header>
         <h1>Buscador de películas</h1>
         <form className='form' onSubmit={handleSubmit}>
-          <input name='search' placeholder='Jhon Wick, Wolverine, Hunger games...'/>
+          <input onChange={handleChange} name='search' placeholder='Jhon Wick, Wolverine, Hunger games...'/>
           <button type='submit'> Buscar película </button>
         </form>
+        {err && <p style={{ color : 'red'}}>{err}</p>}
       </header>
 
 
