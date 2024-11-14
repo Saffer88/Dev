@@ -5,14 +5,10 @@ import { ReturningMapping } from './components/movies.jsx'
 // const API_MOVIES_URL = `https://www.omdbapi.com/?apikey=34bda7af&S=Avengers`
 
 
-
-
-
-
 function App() {
-  const { movies } = useMovies() 
+ 
   const {inputSearch, err, setInputSearch } = useSearch()
-  
+  const { movies, getMovies } = useMovies({ inputSearch }) 
 
   
   // manejar el evento de submit con useRef 
@@ -36,8 +32,8 @@ function App() {
   const handleSubmit= (event) => {
     event.preventDefault()
     //const {search}  = Object.fromEntries(new FormData(event.target))
-    console.log( {inputSearch} )
-
+    //console.log( {inputSearch} )
+    getMovies()
 
 
     // un campo del objeto en especifico usando su nombre
