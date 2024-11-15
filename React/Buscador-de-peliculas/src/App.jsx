@@ -8,7 +8,7 @@ import { ReturningMapping } from './components/movies.jsx'
 function App() {
  
   const {inputSearch, err, setInputSearch } = useSearch()
-  const { movies, getMovies } = useMovies({ inputSearch }) 
+  const { movies, getMovies, loading } = useMovies({ inputSearch }) 
 
   
   // manejar el evento de submit con useRef 
@@ -66,7 +66,11 @@ function App() {
 
       <main>
           
-          <ReturningMapping movies= { movies }/>
+          {
+            loading ? <p>Cargando...</p> :  <ReturningMapping movies= { movies }/>
+
+          }
+         
 
       </main>
     </div>
