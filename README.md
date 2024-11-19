@@ -15,3 +15,4 @@ In this repository I will upload all my personal projects, that I use to learn c
 ## Structure
 
 Each project will have its own explanatory README to show what it consists of. Besides having the logic, services, etc in separate files and folders depending on the case.
+
