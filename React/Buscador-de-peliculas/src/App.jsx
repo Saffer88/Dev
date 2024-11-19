@@ -2,13 +2,16 @@ import './App.css'
 import { useSearch } from './hooks/useSearch.js' 
 import { useMovies } from './hooks/useMovies.js'
 import { ReturningMapping } from './components/movies.jsx'
+import { useMemo, useState } from 'react'
+import debounce from 'just-debounce-it'
 // const API_MOVIES_URL = `https://www.omdbapi.com/?apikey=34bda7af&S=Avengers`
 
 
 function App() {
- 
+
+  const [sort, setSort ] = useState(false)
   const {inputSearch, err, setInputSearch } = useSearch()
-  const { movies, getMovies } = useMovies({ inputSearch }) 
+  const { movies, getMovies, loading } = useMovies({ inputSearch, sort}) 
 
   
   // manejar el evento de submit con useRef 
@@ -33,7 +36,7 @@ function App() {
     event.preventDefault()
     //const {search}  = Object.fromEntries(new FormData(event.target))
     //console.log( {inputSearch} )
-    getMovies()
+    getMovies({ inputSearch })
 
 
     // un campo del objeto en especifico usando su nombre
@@ -43,10 +46,23 @@ function App() {
     // console.log(search)
   }
 
+  const debouncedMovies = useMemo(() =>
+    debounce( inputSearch => {
+        getMovies({ inputSearch })  
+    }, 300)
+    ,[getMovies])
+
+
+
+
   const handleChange = (event) => {
     const newSearch = event.target.value
-    if(newSearch.startsWith(' ') ) return
-    setInputSearch(event.target.value)
+    setInputSearch(newSearch)
+    debouncedMovies(newSearch)
+  }
+
+  const handleSort = () => {
+    setSort(!sort)
   }
 
 
@@ -59,6 +75,7 @@ function App() {
         <form className='form' onSubmit={handleSubmit}>
           <input onChange={handleChange} name='search' placeholder='Jhon Wick, Wolverine, Hunger games...'/>
           <button type='submit'> Buscar película </button>
+          <input type='checkbox' onChange={handleSort} checked={sort} ></input>
         </form>
         {err && <p style={{ color : 'red'}}>{err}</p>}
       </header>
@@ -66,7 +83,11 @@ function App() {
 
       <main>
           
-          <ReturningMapping movies= { movies }/>
+          {
+            loading ? <p>Cargando...</p> :  <ReturningMapping movies= { movies }/>
+
+          }
+         
 
       </main>
     </div>
