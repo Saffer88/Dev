@@ -4,4 +4,4 @@ En este repositorio subiré todos mis proyectos personales, que use para aprende
 
 ## Estructura
 
-Cada proyecto en tendrá su propio README explicativo para mostrar en qué consiste. Además de tener la lógica, servicios, etc  de manera separada tanto en archivos como en carpetas diferentes dependiendo del caso.  
+Cada proyecto tendrá su propio README explicativo para mostrar en qué consiste. Además de tener la lógica, servicios, etc  de manera separada tanto en archivos como en carpetas diferentes dependiendo del caso.  
