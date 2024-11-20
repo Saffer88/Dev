@@ -4,8 +4,8 @@ Crea una aplicación para películas
 
 API a usar
 
-- https://www.omdbapi.comn/
-- API_KEY: 4287ad07
+- https://www.omdbapi.com/
+- API_KEY: ------
 
 Requerimientos:
 
